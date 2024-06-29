@@ -302,6 +302,8 @@ export default function Options() {
                         setIndex={setIndex}
                         setSelected={setSelected}
                         setDone={setDone}
+                        setHumanScore={setHumanScore}
+                        setAiScore={setAiScore}
                     />
                 )}
             </div>
@@ -376,9 +378,19 @@ interface FinalScoreProps {
     setIndex: React.Dispatch<React.SetStateAction<number>>;
     setSelected: React.Dispatch<React.SetStateAction<Option | null>>;
     setDone: React.Dispatch<React.SetStateAction<boolean>>;
+    setHumanScore: React.Dispatch<React.SetStateAction<number>>;
+    setAiScore: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function FinalScore({ aiScore, humanScore, setIndex, setSelected, setDone }: FinalScoreProps) {
+function FinalScore({
+    aiScore,
+    humanScore,
+    setIndex,
+    setSelected,
+    setDone,
+    setHumanScore,
+    setAiScore
+}: FinalScoreProps) {
     return (
         <motion.div
             className="flex w-full max-w-full flex-col items-center justify-center gap-2 text-center sm:max-w-[65%]"
@@ -408,6 +420,8 @@ function FinalScore({ aiScore, humanScore, setIndex, setSelected, setDone }: Fin
                 onClick={() => {
                     setIndex(0);
                     setSelected(null);
+                    setHumanScore(0);
+                    setAiScore(0);
                     setDone(false);
                 }}
             >

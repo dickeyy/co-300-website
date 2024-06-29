@@ -2,9 +2,11 @@
 
 import { Option } from "@/types/option";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { motion } from "framer-motion";
+import { Progress } from "./ui/progress";
+import { BotIcon, PersonStandingIcon, UserIcon } from "lucide-react";
 
 const options: Option[][] = [
     [
@@ -41,24 +43,6 @@ const options: Option[][] = [
             forAI: false,
             analysis:
                 "AI Surveillance vs. Current Surveillance: Implementing an AI surveillance system that significantly reduces crime rates presents a compelling case for public safety. It could potentially create safer communities and reduce the strain on law enforcement resources. However, this comes at a considerable cost to individual privacy. The invasive nature of such a system raises concerns about civil liberties, potential abuse of power, and the creation of a surveillance state. There's also the risk of data breaches or misuse of collected information. Maintaining current surveillance levels preserves individual privacy rights but at the expense of potentially higher crime rates. This option respects civil liberties but may leave communities more vulnerable to criminal activities. The dilemma underscores the delicate balance between security and privacy in modern society and the ethical implications of using AI for mass surveillance."
-        }
-    ],
-    [
-        {
-            title: "Human Doctors",
-            description:
-                "Rely on human doctors who may make more errors but provide personalized care.",
-            forAI: false,
-            analysis:
-                "Human Doctors vs. AI Diagnosis: Relying on human doctors maintains the crucial elements of empathy, intuition, and personalized care in medical practice. Doctors can consider a patient's unique circumstances, provide emotional support, and make complex, contextual decisions. However, human doctors are prone to fatigue, bias, and limitations in processing vast amounts of medical data, potentially leading to diagnostic errors. In contrast, AI diagnosis systems offer high accuracy and the ability to process enormous amounts of medical data quickly, potentially catching issues that humans might miss. They can also provide consistent performance without fatigue. However, AI lacks the ability to provide empathetic care, may struggle with unusual or complex cases, and could miss contextual factors that a human doctor would catch. This scenario highlights the challenge of balancing the efficiency and accuracy of AI with the irreplaceable human elements in healthcare."
-        },
-        {
-            title: "AI Diagnosis",
-            description:
-                "Use an AI to diagnose patients, which is highly accurate but lacks empathy and personal touch.",
-            forAI: true,
-            analysis:
-                "Human Doctors vs. AI Diagnosis: Relying on human doctors maintains the crucial elements of empathy, intuition, and personalized care in medical practice. Doctors can consider a patient's unique circumstances, provide emotional support, and make complex, contextual decisions. However, human doctors are prone to fatigue, bias, and limitations in processing vast amounts of medical data, potentially leading to diagnostic errors. In contrast, AI diagnosis systems offer high accuracy and the ability to process enormous amounts of medical data quickly, potentially catching issues that humans might miss. They can also provide consistent performance without fatigue. However, AI lacks the ability to provide empathetic care, may struggle with unusual or complex cases, and could miss contextual factors that a human doctor would catch. This scenario highlights the challenge of balancing the efficiency and accuracy of AI with the irreplaceable human elements in healthcare."
         }
     ],
     [
@@ -189,24 +173,6 @@ const options: Option[][] = [
     ],
     [
         {
-            title: "Transparent AI",
-            description:
-                "Use an AI system that's fully transparent about its decision-making process but operates 20% slower.",
-            forAI: true,
-            analysis:
-                "Transparent AI vs. Black Box AI: A transparent AI system that fully discloses its decision-making process promotes accountability and builds trust with users. It allows for easier auditing, helps identify and correct biases, and provides valuable insights into how the AI reaches its conclusions. This transparency is crucial for applications in sensitive areas like healthcare or finance, where understanding the reasoning behind decisions is often as important as the decisions themselves. However, the trade-off for this transparency is reduced efficiency, which could limit the AI's applicability in scenarios requiring rapid decision-making. On the other hand, a black box AI system that operates 30% faster could significantly enhance productivity in various applications. Its increased efficiency could be particularly valuable in time-sensitive scenarios or when processing large volumes of data. However, the opacity of its decision-making process raises serious concerns about accountability and the potential for hidden biases or errors. This lack of transparency could erode public trust, make it difficult to ensure ethical operation, and potentially lead to unintended consequences. This dilemma underscores the ongoing challenge in AI development of balancing performance with explainability and ethical considerations."
-        },
-        {
-            title: "Black Box AI",
-            description:
-                "Implement a faster AI system that's 30% more efficient but its decision-making process is opaque.",
-            forAI: false,
-            analysis:
-                "Transparent AI vs. Black Box AI: A transparent AI system that fully discloses its decision-making process promotes accountability and builds trust with users. It allows for easier auditing, helps identify and correct biases, and provides valuable insights into how the AI reaches its conclusions. This transparency is crucial for applications in sensitive areas like healthcare or finance, where understanding the reasoning behind decisions is often as important as the decisions themselves. However, the trade-off for this transparency is reduced efficiency, which could limit the AI's applicability in scenarios requiring rapid decision-making. On the other hand, a black box AI system that operates 30% faster could significantly enhance productivity in various applications. Its increased efficiency could be particularly valuable in time-sensitive scenarios or when processing large volumes of data. However, the opacity of its decision-making process raises serious concerns about accountability and the potential for hidden biases or errors. This lack of transparency could erode public trust, make it difficult to ensure ethical operation, and potentially lead to unintended consequences. This dilemma underscores the ongoing challenge in AI development of balancing performance with explainability and ethical considerations."
-        }
-    ],
-    [
-        {
             title: "AI Medical Diagnosis",
             description:
                 "Rely on an AI system for medical diagnoses that's 95% accurate but occasionally makes unexplainable decisions.",
@@ -229,96 +195,116 @@ export default function Options() {
     const [index, setIndex] = useState(0);
     const [selcted, setSelected] = useState<Option | null>(null);
 
+    const [aiScore, setAiScore] = useState(0);
+    const [humanScore, setHumanScore] = useState(0);
+
+    const [done, setDone] = useState(false);
+
     const optionARef = useRef<HTMLDivElement>(null);
     const optionBRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (selcted) {
+            if (selcted.forAI) setAiScore((aiScore) => aiScore + 1);
+            else setHumanScore((humanScore) => humanScore + 1);
+        }
+    }, [selcted]);
+
     return (
-        <div className="flex w-full flex-1 flex-col items-center justify-center gap-12 p-4 sm:p-4">
-            {!selcted ? (
-                <>
-                    <div className="flex flex-col items-center gap-2">
-                        <h1 className="font-serif text-4xl font-bold">Would you rather</h1>
-                        <p className="text-foreground/60 font-serif text-lg">
-                            AI ethics and responsibility ownership
-                        </p>
-                    </div>
-                    <div className="grid w-full max-w-full grid-cols-1 items-center justify-evenly gap-4 sm:max-w-[55%] sm:grid-cols-7">
-                        <motion.div
-                            className="col-span-3 h-full w-full"
-                            initial={{ opacity: 0, x: -200 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <OptionA
-                                option={options[index][0]}
-                                setSelected={setSelected}
-                                ref={optionARef}
-                            />
-                        </motion.div>
-                        <motion.p
-                            className="col-span-1 w-full text-center font-serif text-lg"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.4, delay: 0.25 }}
-                        >
-                            or
-                        </motion.p>
-                        <motion.div
-                            className="col-span-3 h-full w-full"
-                            initial={{ opacity: 0, x: 200 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3, delay: 0.75 }}
-                        >
-                            <OptionB
-                                option={options[index][1]}
-                                setSelected={setSelected}
-                                ref={optionBRef}
-                            />
-                        </motion.div>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <motion.div
-                        className="flex w-full max-w-[45%] flex-col items-center gap-2"
-                        initial={{ opacity: 0, y: 100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                        exit={{ opacity: 0, y: 100 }}
-                    >
-                        <p className="text-foreground/60 font-serif text-sm">You picked</p>
-                        <h1 className="font-serif text-2xl font-bold">{selcted.title}</h1>
-
-                        <div className="mt-8 flex w-full">
-                            <OptionInDepth option={selcted} />
+        <div className="flex h-full flex-1 flex-col items-center justify-center">
+            <nav className="bg-background/50 absolute top-0 z-10 flex w-full items-center justify-between px-8 py-2">
+                <p className="text-foreground/60 font-serif text-sm">AI Score: {aiScore}</p>
+                <p className="text-foreground/60 font-serif text-sm">Human Score: {humanScore}</p>
+            </nav>
+            <div className="flex w-full flex-col items-center justify-center gap-12 p-4 sm:p-4">
+                {!selcted && !done ? (
+                    <>
+                        <div className="flex flex-col items-center gap-2">
+                            <h1 className="font-serif text-4xl font-bold">Would you rather</h1>
+                            <p className="text-foreground/60 font-serif text-lg">
+                                AI ethics and responsibility ownership
+                            </p>
                         </div>
+                        <div className="grid w-full max-w-full grid-cols-1 items-center justify-evenly gap-4 sm:max-w-[55%] sm:grid-cols-7">
+                            <motion.div
+                                className="col-span-3 h-full w-full"
+                                initial={{ opacity: 0, x: -200 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <OptionA
+                                    option={options[index][0]}
+                                    setSelected={setSelected}
+                                    ref={optionARef}
+                                />
+                            </motion.div>
+                            <p className="col-span-1 w-full text-center font-serif text-lg">or</p>
+                            <motion.div
+                                className="col-span-3 h-full w-full"
+                                initial={{ opacity: 0, x: 200 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.3, delay: 0.4 }}
+                            >
+                                <OptionB
+                                    option={options[index][1]}
+                                    setSelected={setSelected}
+                                    ref={optionBRef}
+                                />
+                            </motion.div>
+                        </div>
+                    </>
+                ) : !done && selcted ? (
+                    <>
+                        <motion.div
+                            className="flex w-full max-w-[45%] flex-col items-center gap-2"
+                            initial={{ opacity: 0, y: 100 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4 }}
+                            exit={{ opacity: 0, y: 100 }}
+                        >
+                            <p className="text-foreground/60 font-serif text-sm">You picked</p>
+                            <h1 className="font-serif text-2xl font-bold">{selcted.title}</h1>
 
-                        {index < options.length - 1 ? (
-                            <Button
-                                className="mt-12 w-full"
-                                variant={"ghost"}
-                                onClick={() => {
-                                    setIndex(index + 1);
-                                    setSelected(null);
-                                }}
-                            >
-                                Next
-                            </Button>
-                        ) : (
-                            <Button
-                                className="mt-12 w-full"
-                                variant={"ghost"}
-                                onClick={() => {
-                                    setIndex(0);
-                                    setSelected(null);
-                                }}
-                            >
-                                Start Over
-                            </Button>
-                        )}
-                    </motion.div>
-                </>
-            )}
+                            <div className="mt-8 flex w-full">
+                                <OptionInDepth option={selcted} />
+                            </div>
+
+                            {index < options.length - 1 ? (
+                                <Button
+                                    className="mt-12 w-full"
+                                    variant={"ghost"}
+                                    onClick={() => {
+                                        setIndex(index + 1);
+                                        setSelected(null);
+                                    }}
+                                >
+                                    Next
+                                </Button>
+                            ) : (
+                                <Button
+                                    className="mt-12 w-full"
+                                    variant={"ghost"}
+                                    onClick={() => {
+                                        setIndex(0);
+                                        setSelected(null);
+                                        setDone(true);
+                                    }}
+                                >
+                                    Finish
+                                </Button>
+                            )}
+                        </motion.div>
+                    </>
+                ) : (
+                    <FinalScore
+                        aiScore={aiScore}
+                        humanScore={humanScore}
+                        setIndex={setIndex}
+                        setSelected={setSelected}
+                        setDone={setDone}
+                    />
+                )}
+            </div>
         </div>
     );
 }
@@ -334,7 +320,7 @@ function OptionA({
 }) {
     return (
         <Card
-            className="col-span-3 h-full w-full cursor-pointer bg-purple-500/40 transition-colors ease-in-out hover:bg-purple-500/60"
+            className="col-span-3 h-full w-full cursor-pointer border-purple-600/40 bg-purple-500/40 transition-colors ease-in-out hover:bg-purple-500/60"
             onClick={() => setSelected(option)}
             ref={ref}
         >
@@ -359,7 +345,7 @@ function OptionB({
 }) {
     return (
         <Card
-            className="col-span-3 h-full w-full cursor-pointer bg-green-500/40 transition-colors ease-in-out hover:bg-green-500/60"
+            className="col-span-3 h-full w-full cursor-pointer border-green-600/40 bg-green-500/40 transition-colors ease-in-out hover:bg-green-500/60"
             onClick={() => setSelected(option)}
             ref={ref}
         >
@@ -381,5 +367,52 @@ function OptionInDepth({ option }: { option: Option }) {
                 <CardDescription className="text-foreground/60">{option.analysis}</CardDescription>
             </CardHeader>
         </Card>
+    );
+}
+
+interface FinalScoreProps {
+    aiScore: number;
+    humanScore: number;
+    setIndex: React.Dispatch<React.SetStateAction<number>>;
+    setSelected: React.Dispatch<React.SetStateAction<Option | null>>;
+    setDone: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function FinalScore({ aiScore, humanScore, setIndex, setSelected, setDone }: FinalScoreProps) {
+    return (
+        <motion.div
+            className="flex w-full max-w-[65%] flex-col items-center justify-center gap-2 text-center"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            exit={{ opacity: 0, y: 100 }}
+        >
+            <h1 className="font-serif text-4xl font-bold">You&apos;re Done!</h1>
+            <p className="text-foreground/60 font-serif text-lg">
+                Your answers indicate that you tend to find {aiScore > humanScore ? "AI" : "human"}{" "}
+                solutions to be more ethical and responsible.
+            </p>
+
+            <div className="mt-8 flex w-full flex-col items-center justify-center gap-2">
+                <p className="text-foreground/60 font-serif text-sm">Human-o-meter</p>
+                <div className="flex w-full flex-row items-center justify-center gap-4">
+                    <BotIcon className="h-8 w-8" />
+                    <Progress value={humanScore * 10} max={100} className="bg-foreground/20" />
+                    <UserIcon className="h-8 w-8" />
+                </div>
+            </div>
+
+            <Button
+                className="mt-24 w-full"
+                variant={"ghost"}
+                onClick={() => {
+                    setIndex(0);
+                    setSelected(null);
+                    setDone(false);
+                }}
+            >
+                Start Over
+            </Button>
+        </motion.div>
     );
 }

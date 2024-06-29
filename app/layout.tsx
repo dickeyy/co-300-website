@@ -3,6 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import { Averia_Serif_Libre as FontSerif } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -15,9 +16,12 @@ const fontSerif = FontSerif({
     weight: ["400", "700"]
 });
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "AI Ethics and Responsibility",
-    description: "A would you rather game for ethics and responsibility in AI."
+    description: "A would you rather game for ethics and responsibility in AI.",
+    icons: {
+        icon: "/logo.png"
+    }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -26,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head />
             <body
                 className={cn(
-                    "bg-background min-h-screen font-sans antialiased",
+                    "min-h-screen bg-background font-sans antialiased",
                     fontSans.variable,
                     fontSerif.variable
                 )}

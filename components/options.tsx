@@ -212,16 +212,16 @@ export default function Options() {
 
     return (
         <div className="flex h-full flex-1 flex-col items-center justify-center">
-            <nav className="bg-background/50 absolute top-0 z-10 flex w-full items-center justify-between px-8 py-2">
-                <p className="text-foreground/60 font-serif text-sm">AI Score: {aiScore}</p>
-                <p className="text-foreground/60 font-serif text-sm">Human Score: {humanScore}</p>
+            <nav className="absolute top-0 z-10 flex w-full items-center justify-between bg-background/50 px-8 py-2">
+                <p className="font-serif text-sm text-foreground/60">AI Score: {aiScore}</p>
+                <p className="font-serif text-sm text-foreground/60">Human Score: {humanScore}</p>
             </nav>
             <div className="flex w-full flex-col items-center justify-center gap-12 p-4 sm:p-4">
                 {!selcted && !done ? (
                     <>
                         <div className="flex flex-col items-center gap-2">
                             <h1 className="font-serif text-4xl font-bold">Would you rather</h1>
-                            <p className="text-foreground/60 font-serif text-lg">
+                            <p className="font-serif text-lg text-foreground/60">
                                 AI ethics and responsibility ownership
                             </p>
                         </div>
@@ -256,13 +256,13 @@ export default function Options() {
                 ) : !done && selcted ? (
                     <>
                         <motion.div
-                            className="flex w-full max-w-[45%] flex-col items-center gap-2"
+                            className="mt-12 flex w-full max-w-full flex-col items-center gap-2 sm:mt-0 sm:max-w-[45%]"
                             initial={{ opacity: 0, y: 100 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4 }}
                             exit={{ opacity: 0, y: 100 }}
                         >
-                            <p className="text-foreground/60 font-serif text-sm">You picked</p>
+                            <p className="font-serif text-sm text-foreground/60">You picked</p>
                             <h1 className="font-serif text-2xl font-bold">{selcted.title}</h1>
 
                             <div className="mt-8 flex w-full">
@@ -381,20 +381,20 @@ interface FinalScoreProps {
 function FinalScore({ aiScore, humanScore, setIndex, setSelected, setDone }: FinalScoreProps) {
     return (
         <motion.div
-            className="flex w-full max-w-[65%] flex-col items-center justify-center gap-2 text-center"
+            className="flex w-full max-w-full flex-col items-center justify-center gap-2 text-center sm:max-w-[65%]"
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             exit={{ opacity: 0, y: 100 }}
         >
             <h1 className="font-serif text-4xl font-bold">You&apos;re Done!</h1>
-            <p className="text-foreground/60 font-serif text-lg">
+            <p className="font-serif text-lg text-foreground/60">
                 Your answers indicate that you tend to find {aiScore > humanScore ? "AI" : "human"}{" "}
                 solutions to be more ethical and responsible.
             </p>
 
             <div className="mt-8 flex w-full flex-col items-center justify-center gap-2">
-                <p className="text-foreground/60 font-serif text-sm">Human-o-meter</p>
+                <p className="font-serif text-sm text-foreground/60">Human-o-meter</p>
                 <div className="flex w-full flex-row items-center justify-center gap-4">
                     <BotIcon className="h-8 w-8" />
                     <Progress value={humanScore * 10} max={100} className="bg-foreground/20" />

@@ -27,7 +27,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <head />
+            <head>
+                <script
+                    defer
+                    data-domain="co-300.kyle.so"
+                    src="https://analytics.kyle.so/js/script.js"
+                ></script>
+            </head>
             <body
                 className={cn(
                     "min-h-screen bg-background font-sans antialiased",

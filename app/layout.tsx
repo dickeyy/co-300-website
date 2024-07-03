@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <head>
                 <script
                     defer
-                    data-domain="co-300.kyle.so"
+                    data-domain="co300.kyle.so"
                     src="https://analytics.kyle.so/js/script.js"
                 ></script>
             </head>
